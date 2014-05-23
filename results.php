@@ -41,7 +41,7 @@ if (!empty($_POST)){
 ?>
 <pre>
 <?php
-	//print_r($resp);
+	print_r($resp);
 ?>	
 </pre>
 
@@ -89,17 +89,38 @@ if (!empty($_POST)){
 
 	    // Construct the HTTP GET call 
 	    $recallendpoint = "$recallendpoint?";
-	    $recallendpoint .= "message1=$saferecallquery"; 
+	    $recallendpoint .= "message1=$safequery"; 
 	    $recallendpoint .= "&password=safeGoods"; 
 	    $recallendpoint .= "&userID=safeGoods"; 
 
 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
-        }else{
-        $recallresp = "No recall keyword provided";
-        }
+       
+	    foreach($recallresp->results->result as $recall) { 
+	       $recallNo = $recall->attributes()->recallNo;
+	       $recallURL = $recall->attributes()->recallURL;
+	       $manufacturer = $recall->attributes()->manufacturer;
+	       $prname = $recall->attributes()->prname;
+	       $hazard = $recall->attributes()->hazard;
+	       $country_mfg = $recall->attributes()->country_mfg;
+	       
+	       
+	           
+	        $results .= "<div class=\"recall\" id=\"$recallNo\">";	   
 	        
+	        $results .= "<div class=\"hazard\">$hazard</div>"; 
+	        $results .= "<div class=\"prname\">$prname</div>"; 
+	        $results .= "<div class=\"manufacturer\">$manufacturer</div>"; 
+	        $results .= "<div class=\"country_mfg\">$country_mfg</div>"; 
+	        $results .= "<div class=\"link\"><a href=\"$recallURL\">more information</a></div>"; 
+	        
+	        $results .= "</div>";
+	    
+	       
+	       
+	    
+	    }
 	         
 	    
 	  }
@@ -145,7 +166,7 @@ if (!empty($_POST)){
 
 print <<<END
 
-<h1>eBay Search Results for $query;</h1>
+<h1>eBay Item $query</h1>
 
 <table>
 <tr>
@@ -157,7 +178,7 @@ print <<<END
 END;
 } else {
 
-print "<div id=\"howTo\">Please use the search to find your desired products on eBAY.</div>";
+print "<div id=\"howTo\">Enter an eBay auction ID to see any safety recalls on the product.</div>";
 }
 
 ?>
