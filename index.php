@@ -41,7 +41,7 @@
         
         <?php if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed") OR isset($_POST['agreed'])) {
 
-                include 'results.php';
+                include 'itemcheckbyID.php';
                 include 'disclaimer.php'; 
 
              }else{
