@@ -57,7 +57,7 @@ if (!empty($_GET)){
 	   
 	    $results .= "<li class=\"ui-li-has-thumb\" id=\"$itemId\">";
 	    $results .= "<a class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" href=\"?itemID=$itemId&searchField=$safequery\">";   	   
-	    $results .= "<img src=\"$pic\">";	   
+	    $results .= "<img class=\"ui-shadow ui-corner-all\" src=\"$pic\">";	   
 	    $results .= "<h4 class=\"title\">$title</h4>";	
 	    $results .= "<h5 class=\"categoryName\">$categoryName</h5>";
 	    $results .= "<p class=\"location\">$location</p>";

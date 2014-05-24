@@ -40,6 +40,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $PrimaryCategoryName = $item->PrimaryCategoryName;	    
 	    $categories = explode(":", $PrimaryCategoryName);//get the last string;	    
 	    $CategoryName = end($categories);
+	    if (($CategoryName) == "Other") {$CategoryName = array_pop($categories);$CategoryName = end($categories);}
 	    $BidCount = $item->BidCount;
 	    $ConvertedCurrentPrice = $item->ConvertedCurrentPrice;
 	    $ListingStatus = $item->ListingStatus;
@@ -49,7 +50,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	   
 	    $results .= "<div class=\"item\" id=\"$ItemID\">";	   
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
-	    $results .= "<img class=\"PictureURL\" src=\"$PictureURL\">";	   
+	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
 	    $results .= "<h2 class=\"Title\">$Title</h2>";	   
 	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
 	    //$results .= "<div class=\"Location\">$Location</div>";
@@ -88,7 +89,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
        
        $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b"><h2>Recalls in this product\'s category:' .$totalRecalls. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
+	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recalls in this product\'s category:' .$totalRecalls. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
 	    foreach($recallresp->results->result as $recall) { 
 	       $recallNo = $recall->attributes()->recallNo;
 	       $recallURL = $recall->attributes()->recallURL;
