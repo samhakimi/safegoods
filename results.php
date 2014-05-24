@@ -3,15 +3,23 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 
 <?php
- 
-if (!empty($_GET)){
+  
 
-   if(isset($_GET['searchField']) AND (trim($_GET['searchField']) != '')) {
+   if(isset($_GET['searchField'])) {
        $query = htmlspecialchars(trim($_GET['searchField']));  
    } else {
        $query = ''; 
 
    }
+   
+   	if (isset($_GET["pageNumber"])) {
+	   $pageNumber = $_GET["pageNumber"];
+    } else {       
+       $pageNumber = '1'; 
+    }
+    
+    
+    
 	// API request variables
 	$endpoint = 'http://svcs.ebay.com/services/search/FindingService/v1';  // URL to call
 	$version = '1.0.0';  // API version supported by your application
@@ -26,9 +34,8 @@ if (!empty($_GET)){
 	$apicall .= "&SECURITY-APPNAME=$appid";
 	$apicall .= "&GLOBAL-ID=$globalid";
 	$apicall .= "&keywords=$safequery";
-	$apicall .= "&paginationInput.entriesPerPage=10";
-
-
+	$apicall .= "&paginationInput.entriesPerPage=5";
+    $apicall .= "&paginationInput.pageNumber=" . $pageNumber ;
 
 
 	// Load the call and capture the document returned by eBay API
@@ -56,7 +63,7 @@ if (!empty($_GET)){
 	   
 	   
 	    $results .= "<li class=\"ui-li-has-thumb\" id=\"$itemId\">";
-	    $results .= "<a class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" href=\"?itemID=$itemId&searchField=$safequery\">";   	   
+	    $results .= "<a class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" href=\"?itemID=$itemId&searchField=$safequery&pageNumber=$pageNumber\">";   	   
 	    $results .= "<img class=\"ui-shadow ui-corner-all\" src=\"$pic\">";	   
 	    $results .= "<h4 class=\"title\">$title</h4>";	
 	    $results .= "<h5 class=\"categoryName\">$categoryName</h5>";
@@ -69,9 +76,8 @@ if (!empty($_GET)){
 	  }
 	    $results .= "</ul>"; 
 	} else {
-	  $results  = "Something went wrong. Please try your search again."; 
-	}
-   }
+	  $results  = "Search ebay for an item, we'll check the safety recalls in the product category for you."; 
+	} 
 ?>
 
 
@@ -79,18 +85,24 @@ if (!empty($_GET)){
 
 <div data-role="page">
 <div data-role="header">
-<h1>SafeGoods: EBAY Item Recall Checks</h1>
+<h1>SafeGoods Search</h1>
 </div>
 
 <div role="main" class="ui-content">
+
+
+
+
 <div class="ui-field-contain">
 <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
  
 <label for="searchField">Search EBAY:</label>
-<input type="search" name="searchField" id="searchField" value=""> 
+<input type="search" name="searchField" id="searchField" value="<?php echo $safequery ?>"> 
  
 </form> 
-</div>
+
+
+<?php if($query != ''){ include 'navbuttons.php'; } ?>
  
 <?php 
 if (!empty($results)){ 
@@ -102,11 +114,18 @@ END;
 }
 ?>
 
+
+
+<?php if($query != ''){ include 'navbuttons.php'; } ?>
+
 </div>
 <?php 
 include 'disclaimer.php';
 ?>
 
+
+
+<?php if ($pageNumber == 1) {echo " data-disabled=\"true\"";} ?>
 </div>
 </div>
 

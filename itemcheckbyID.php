@@ -6,6 +6,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
    
     $ItemID = $_GET['itemID'];
     $searchField = $_GET['searchField'];
+    $pageNumber = $_GET['pageNumber'];
 	// API request variables
 	$endpoint = 'http://open.api.ebay.com/shopping';  // URL to call 
 	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613';   
@@ -41,8 +42,8 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $PrimaryCategoryName = preg_replace('/[,\.&-\d\(\)]/', ' ', $PrimaryCategoryName); ;	    
 	    $categories = explode(":", $PrimaryCategoryName);//get the last string;	    
 	    $CategoryName = end($categories);//last in the category list	    
-	    $uselessCategories = array("Other", "Factory Manufactured", true); 
-        if (in_array($CategoryName, $uselessCategories)) {
+	    $uselessCategories = array("Other", "Factory Manufactured"); 
+        if (in_array($CategoryName, $uselessCategories, true)) {
            $CategoryName = array_pop($categories);
            $CategoryName = end($categories);
         }
@@ -61,7 +62,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    //$results .= "<div class=\"Location\">$Location</div>";
 	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
 	    //$results .= "<div class=\"BidCount\">$BidCount</div>";
-	    $results .= "<div class=\"link\"><a href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
+	    $results .= "<div><a class=\"ui-btn ui-icon-navigation ui-btn-icon-left ui-corner-all ui-shadow ui-btn-inline\" href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
 	    //$results .= "<div class=\"EndTime\">$EndTime</div>";
 	    
 	    $results .= "</div>";
@@ -130,12 +131,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 <div data-role="page">
 <div data-role="header">
-<a id="backButton" href="?searchField=<?php echo $searchField ?>" data-icon="arrow-l">Go Back</a>
+<a id="backButton" href="?searchField=<?php echo $searchField ?>&pageNumber=<?php echo $pageNumber ?>" data-icon="arrow-l">Go Back</a>
 <h1><?php echo $Title ?></h1> 
 </div>
  
-<div role="main" class="ui-content">
- 
+<div role="main" class="ui-content"> 
 <?php if (!empty($results)){ 
 print <<<END
  
@@ -144,7 +144,7 @@ print <<<END
 END;
 }
 ?>
-
+ 
 </div>
 <?php 
 include 'disclaimer.php';
