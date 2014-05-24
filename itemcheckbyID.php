@@ -1,9 +1,5 @@
 <?php
-error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging
-?>
-
-<?php
- 
+error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging 
 
 
    if(isset($_GET['itemID'])) { 
@@ -119,6 +115,24 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 
 
+ 
+ 
+<?php if (!empty($results)){ 
+
+print <<<END
+ 
+    $results 
+    
+END;
+}
+?>
+
+<script>
+function goBack() {
+    window.history.back()
+}
+</script> 
+<button onclick="goBack()">Go Back</button> 
 
 
 <pre>
@@ -128,36 +142,3 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 </pre>
 
 
-
-
-
-<form method="post" action="">
- Search for  <input type="text" id="searchField"  name="searchField" />  <input type="submit" value="Find" name="submit"/> 
-</form> 
-
-
-
-
-
-
-
-
-
-<!-- Build the HTML page with values from the call response -->
- 
-<?php if (!empty($results)){ 
-
-print <<<END
-
-<h1>eBay Item $query</h1>
-
- 
-    $results 
-    
-END;
-} else {
-
-print "<div id=\"howTo\">Enter an eBay item ID to see any safety recalls on the product.</div>";
-}
-
-?>
