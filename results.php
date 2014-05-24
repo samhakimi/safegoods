@@ -36,7 +36,7 @@ if (!empty($_GET)){
  
 	// Check to see if the request was successful, else print an error
 	if ($resp->ack == "Success") {
-	  $results = '';
+	  $results = '<ul class="ui-listview" data-role="listview">';
 	  // If the response was loaded, parse it and build links  
 	  foreach($resp->searchResult->item as $item) {
 	    $pic   = $item->galleryURL;
@@ -55,18 +55,19 @@ if (!empty($_GET)){
 	   
 	   
 	   
-	    $results .= "<div class=\"itemId\" id=\"$itemId\">";	   
-	    $results .= "<img class=\"pic\" src=\"$pic\">";	   
-	    $results .= "<div class=\"title\">$title</div>";	   
-	    $results .= "<div class=\"categoryName\">$categoryName</div>";
-	    $results .= "<div class=\"location\">$location</div>";
-	    $results .= "<div class=\"currentPrice\">\$ $currentPrice</div>";
-	    $results .= "<div class=\"bidCount\">$bidCount</div>";
-	    $results .= "<div class=\"link\"><a href=\"?itemID=$itemId&searchField=$safequery\">Product Recall Check</a></div>";
-	    //$results .= "<div class=\"sellingState\">$sellingState $listingType</div>"; 	    
-	    $results .= "</div>"; 
+	    $results .= "<li class=\"ui-li-has-thumb\" id=\"$itemId\">";
+	    $results .= "<a class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" href=\"?itemID=$itemId&searchField=$safequery\">";   	   
+	    $results .= "<img src=\"$pic\">";	   
+	    $results .= "<h4 class=\"title\">$title</h4>";	
+	    $results .= "<h5 class=\"categoryName\">$categoryName</h5>";
+	    $results .= "<p class=\"location\">$location</p>";
+	    $results .= "<p class=\"currentPrice\">Price: $$currentPrice</p>"; 	    
+	    $results .= "<p class=\"sellingState\">Sale: $sellingState | Type:$listingType | Active Bids: $bidCount</p>"; 	    
+	    $results .= "</a>"; 
+	    $results .= "</li>"; 
 	    
 	  }
+	    $results .= "</ul>"; 
 	} else {
 	  $results  = "Something went wrong. Please try your search again."; 
 	}
@@ -103,5 +104,4 @@ include 'disclaimer.php';
 ?>
 
 </div>
-
 

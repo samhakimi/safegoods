@@ -12,6 +12,11 @@
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
         <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+        <style>
+          .pic {
+            float: right;
+          }
+        </style>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -57,19 +62,7 @@
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
           ga('create', 'UA-51282511-1', 'unclesams.us');
-          ga('send', 'pageview');
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        $( "[type='submit']" ).button({ icon: "search" });
+          ga('send', 'pageview'); 
         
         
         </script>

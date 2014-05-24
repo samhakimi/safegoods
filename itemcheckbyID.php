@@ -50,14 +50,13 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $results .= "<div class=\"item\" id=\"$ItemID\">";	   
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img class=\"PictureURL\" src=\"$PictureURL\">";	   
-	    $results .= "<div class=\"Title\">$Title</div>";	   
-	    $results .= "<div class=\"PrimaryCategoryName\">$PrimaryCategoryName</div>";
-	    $results .= "<div class=\"Location\">$Location</div>";
-	    $results .= "<div class=\"ConvertedCurrentPrice\">$ConvertedCurrentPrice</div>";
-	    $results .= "<div class=\"BidCount\">$BidCount</div>";
+	    $results .= "<h4 class=\"Title\">$Title</h4>";	   
+	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
+	    //$results .= "<div class=\"Location\">$Location</div>";
+	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
+	    //$results .= "<div class=\"BidCount\">$BidCount</div>";
 	    $results .= "<div class=\"link\"><a href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
-	    $results .= "<div class=\"ConditionDisplayName\">$ConditionDisplayName</div>";
-	    $results .= "<div class=\"EndTime\">$EndTime</div>";
+	    //$results .= "<div class=\"EndTime\">$EndTime</div>";
 	    
 	    $results .= "</div>";
 	    
@@ -110,7 +109,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    }
 	          
 	} else {
-	  $results  = "Something errored out. Please go back and try your search  again.";
+	  $results  = "Something errored out. Please reload teh page to try the recalls search  again.";
 	}
  
 ?>
