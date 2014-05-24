@@ -3,23 +3,15 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 
 <?php
-
-if (!empty($_POST)){
-
+ 
 
 
-
-   if(isset($_POST['searchField']) AND (trim($_POST['searchField']) != '')) {
-       $query = htmlspecialchars(trim($_POST['searchField']));  
-   } else {
-       $query = ''; 
-
-}
+   if(isset($_GET['itemID'])) { 
+   
+    $ItemID = $_GET['itemID'];
 	// API request variables
 	$endpoint = 'http://open.api.ebay.com/shopping';  // URL to call 
-	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613';  // Replace with your own AppID 
-	$safequery = urlencode($query);  // Make the query URL-friendly
-
+	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613';   
 	// Construct the findItemsByKeywords HTTP GET call 
 	$apicall = "$endpoint?";
 	$apicall .= "callname=GetSingleItem";
@@ -27,23 +19,15 @@ if (!empty($_POST)){
 	$apicall .= "&version=873";
 	$apicall .= "&appid=$appid";
 	$apicall .= "&siteid=0";
-	$apicall .= "&ItemID=$safequery"; 
+	$apicall .= "&ItemID=$ItemID";
 
 
 
 
 	// Load the call and capture the document returned by eBay API
 	$resp = simplexml_load_file($apicall);
-
-
-?>
-<pre>
-<?php
-	print_r($resp);
-?>	
-</pre>
-
-<?php
+    }
+ 
 	// Check to see if the request was successful, else print an error
 	if ($resp->Ack == "Success") {
 	    $results = '';
@@ -56,7 +40,9 @@ if (!empty($_POST)){
 	    $GalleryURL = $item->GalleryURL;
 	    $PictureURL = $item->PictureURL;
 	    $PrimaryCategoryID = $item->PrimaryCategoryID;
-	    $PrimaryCategoryName = $item->PrimaryCategoryName;
+	    $PrimaryCategoryName = $item->PrimaryCategoryName;	    
+	    $categories = explode(":", $PrimaryCategoryName);//get the last string;	    
+	    $CategoryName = end($categories);
 	    $BidCount = $item->BidCount;
 	    $ConvertedCurrentPrice = $item->ConvertedCurrentPrice;
 	    $ListingStatus = $item->ListingStatus;
@@ -65,7 +51,7 @@ if (!empty($_POST)){
 	    $ConditionDisplayName = $item->ConditionDisplayName;
 	   
 	    $results .= "<div class=\"item\" id=\"$ItemID\">";	   
-	    $results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
+	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img class=\"PictureURL\" src=\"$PictureURL\">";	   
 	    $results .= "<div class=\"Title\">$Title</div>";	   
 	    $results .= "<div class=\"PrimaryCategoryName\">$PrimaryCategoryName</div>";
@@ -81,21 +67,27 @@ if (!empty($_POST)){
 	    
 	    
 	    //recalls info gathering
+	    // maybe split title, get rid of all word less than 5 letters long
+	     
 	    
+	    //$stringForRecalls = preg_replace("([0-9]+)","", $stringForRecalls);
+	    //$stringForRecalls = preg_replace("(with.*)","", $stringForRecalls);
+	    //$stringForRecalls = preg_replace("(\s.*)","", $stringForRecalls);
 
 	    // API request variables
-	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call 
-	    $saferecallquery = urlencode($Title);  // Title from the eBay result, make the query URL-friendly
-
+	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
 	    // Construct the HTTP GET call 
 	    $recallendpoint = "$recallendpoint?";
-	    $recallendpoint .= "message1=$safequery"; 
+	    $recallendpoint .= "message1=$CategoryName"; 
 	    $recallendpoint .= "&password=safeGoods"; 
 	    $recallendpoint .= "&userID=safeGoods"; 
 
+        //print_r($recallendpoint);
 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
+	    
+	    if($recallresp->attributes->outcome == "success"){
        
 	    foreach($recallresp->results->result as $recall) { 
 	       $recallNo = $recall->attributes()->recallNo;
@@ -116,21 +108,14 @@ if (!empty($_POST)){
 	        $results .= "<div class=\"link\"><a href=\"$recallURL\">more information</a></div>"; 
 	        
 	        $results .= "</div>";
-	    
-	       
-	       
-	    
+	        }
+	       	    
 	    }
 	          
-	}
-	// If the response does not indicate 'Success,' print an error
-	else {
+	} else {
 	  $results  = "eBay responded with error code";
 	}
-
-
-
-   }
+ 
 ?>
 
 
@@ -166,17 +151,13 @@ print <<<END
 
 <h1>eBay Item $query</h1>
 
-<table>
-<tr>
-  <td>
-    $results
-  </td>
-</tr>
-</table> 
+ 
+    $results 
+    
 END;
 } else {
 
-print "<div id=\"howTo\">Enter an eBay auction ID to see any safety recalls on the product.</div>";
+print "<div id=\"howTo\">Enter an eBay item ID to see any safety recalls on the product.</div>";
 }
 
 ?>
