@@ -3,14 +3,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 
 <?php
+ 
+if (!empty($_GET)){
 
-if (!empty($_POST)){
-
-
-
-
-   if(isset($_POST['searchField']) AND (trim($_POST['searchField']) != '')) {
-       $query = htmlspecialchars(trim($_POST['searchField']));  
+   if(isset($_GET['searchField']) AND (trim($_GET['searchField']) != '')) {
+       $query = htmlspecialchars(trim($_GET['searchField']));  
    } else {
        $query = ''; 
 
@@ -56,64 +53,55 @@ if (!empty($_POST)){
 	    $sellingState = $item->sellingStatus->sellingState;
 	    $timeLeft = $item->sellingStatus->timeLeft;
 	   
+	   
+	   
 	    $results .= "<div class=\"itemId\" id=\"$itemId\">";	   
 	    $results .= "<img class=\"pic\" src=\"$pic\">";	   
 	    $results .= "<div class=\"title\">$title</div>";	   
 	    $results .= "<div class=\"categoryName\">$categoryName</div>";
 	    $results .= "<div class=\"location\">$location</div>";
-	    $results .= "<div class=\"currentPrice\">".money_format('%i', floatval($currentPrice))."</div>";
+	    $results .= "<div class=\"currentPrice\">\$ $currentPrice</div>";
 	    $results .= "<div class=\"bidCount\">$bidCount</div>";
-	    $results .= "<div class=\"link\"><a href=\"?itemID=$itemId\">Recall Check</a></div>";
-	    $results .= "<div class=\"sellingState\">$sellingState $listingType</div>";
-	    $results .= "<div class=\"timeLeft\">$timeLeft</div>";
-	    
+	    $results .= "<div class=\"link\"><a href=\"?itemID=$itemId&searchField=$safequery\">Product Recall Check</a></div>";
+	    //$results .= "<div class=\"sellingState\">$sellingState $listingType</div>"; 	    
 	    $results .= "</div>"; 
 	    
 	  }
+	} else {
+	  $results  = "Something went wrong. Please try your search again."; 
 	}
-	// If the response does not indicate 'Success,' print an error
-	else {
-	  $results  = "eBay responded with error code";
-	}
-
-
-
    }
 ?>
 
 
 
+
+<div data-role="page">
+<div data-role="header">
+<h1>SafeGoods: EBAY Item Recall Checks</h1>
+</div>
+
+<div class="ui-field-contain">
+<form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
  
-
-
-
-<form method="post" action="">
- Search for  <input type="text" id="searchField"  name="searchField" />  <input type="submit" value="Find" name="submit"/> 
+<label for="searchField">Search EBAY:</label>
+<input type="search" name="searchField" id="searchField" value=""> 
+ 
 </form> 
-
-
-
-
-
-
-
-
-
-<!-- Build the HTML page with values from the call response -->
+</div>
  
-<?php if (!empty($results)){ 
-
+<?php 
+if (!empty($results)){ 
 print <<<END
-
-<h1>eBay Item $query</h1>
-
-<table>
-<tr>
-  <td>
-    $results
-  </td>
-</tr>
-</table> 
+ 
+    $results 
+    
 END;
 }
+
+include 'disclaimer.php';
 ?>
+
+</div>
+
+

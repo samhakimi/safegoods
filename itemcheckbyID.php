@@ -2,9 +2,10 @@
 error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging 
 
 
-   if(isset($_GET['itemID'])) { 
+   if(isset($_GET['itemID']) AND isset($_GET['searchField'])) { 
    
     $ItemID = $_GET['itemID'];
+    $searchField = $_GET['searchField'];
 	// API request variables
 	$endpoint = 'http://open.api.ebay.com/shopping';  // URL to call 
 	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613';   
@@ -109,30 +110,27 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    }
 	          
 	} else {
-	  $results  = "eBay responded with error code";
+	  $results  = "Something errored out. Please go back and try your search  again.";
 	}
  
 ?>
-
-
+<div data-role="page">
+<div data-role="header">
+<a id="backButton" href="?searchField=<?php echo $searchField ?>" data-icon="arrow-l">Go Back</a>
+<h1><?php echo $Title ?></h1> 
+</div>
  
  
 <?php if (!empty($results)){ 
-
 print <<<END
  
     $results 
     
 END;
 }
+include 'disclaimer.php';
 ?>
-
-<script>
-function goBack() {
-    window.history.back()
-}
-</script> 
-<button onclick="goBack()">Go Back</button> 
+ 
 
 
 <pre>
@@ -140,5 +138,5 @@ function goBack() {
 	print_r($recallresp);
 ?>	
 </pre>
-
+</div>
 

@@ -18,7 +18,6 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- integrate shopzilla and the recall api -->
         
 	    <?php
         if (!empty($_POST)){
@@ -37,11 +36,10 @@
 
                if(isset($_GET['itemID'])) { 
                             include 'itemcheckbyID.php';
-               } else {   
+               }else{   
                             include 'results.php';   
                }
      
-               include 'disclaimer.php'; 
 
              }else{
                
@@ -61,6 +59,27 @@
           ga('create', 'UA-51282511-1', 'unclesams.us');
           ga('send', 'pageview');
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        $( "[type='submit']" ).button({ icon: "search" });
+        
+        
         </script>
+        
+        
+        
+        
+        
+        
+        
+        
     </body>
 </html>
