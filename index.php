@@ -47,13 +47,16 @@
                }
      
 
-             }else{
-               
-                include 'agreement.php'; 
-             }
-         ?> 
+         }else{
+           echo "<script>\$.mobile.changePage( \"#agreement\", { role: \"dialog\"});</script>";
+         }
+       ?> 
 
 
+<?php 
+include 'disclaimer.php';
+include 'agreement.php';
+?>
 
 
        <script>

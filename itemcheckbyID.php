@@ -54,11 +54,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $ConditionID = $item->ConditionID;
 	    $ConditionDisplayName = $item->ConditionDisplayName;
 	   
-	    $results .= "<div class=\"item\" id=\"$ItemID\">";	   
-	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
-	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
+	    $results .= "<div id=\"$ItemID\">";	   
 	    $results .= "<h2 class=\"Title\">$Title</h2>";	   
 	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
+	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
+	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
 	    //$results .= "<div class=\"Location\">$Location</div>";
 	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
 	    //$results .= "<div class=\"BidCount\">$BidCount</div>";
@@ -95,7 +95,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
        
        $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>'.$totalRecalls . ' Recalls found for ' . $CategoryName. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
+	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>'.$totalRecalls . ' Recalls found in ' . $CategoryName. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
 	    
 	       $results .= "<div data-role=\"collapsible-set\">";
 	    foreach($recallresp->results->result as $recall) { 
@@ -125,7 +125,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	          
 	        $results .= "</div>";//closeout the a/b grid
 	} else {
-	  $results  = "Something errored out. Please reload teh page to try the recalls search  again.";
+	  $results  = "Communication error. Please reload page.";
 	}
  
 ?>
@@ -146,9 +146,4 @@ END;
 ?>
  
 </div>
-<?php 
-include 'disclaimer.php';
-?>
- 
 </div>
-

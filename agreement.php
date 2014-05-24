@@ -1,4 +1,4 @@
-<div data-role="page">
+<div data-role="page" id="agreement" data-close-btn="none"  data-dialog="true">
 <div data-role="header">
 <h1>DISCLAIMER</h1>
 </div>
@@ -11,12 +11,12 @@ THE MATERIAL EMBODIED IN THIS SOFTWARE IS PROVIDED TO YOU “AS-IS” AND WITHOU
   <input type="button" id="notagreeButton"   value="I Do Not Agree" name="notagreed"  /> 
 </form> 
 
-
-</div> 
-</div> 
-
 <script>
     
         $( "#agreeButton" ).button({ icon: "check" });
         $( "#notagreeButton" ).button({ icon: "delete" });
 </script>
+
+
+</div> 
+</div> 

@@ -118,14 +118,6 @@ END;
 
 <?php if($query != ''){ include 'navbuttons.php'; } ?>
 
-</div>
-<?php 
-include 'disclaimer.php';
-?>
 
-
-
-<?php if ($pageNumber == 1) {echo " data-disabled=\"true\"";} ?>
 </div>
 </div>
-
