@@ -82,6 +82,7 @@ if (!empty($_GET)){
 <h1>SafeGoods: EBAY Item Recall Checks</h1>
 </div>
 
+<div role="main" class="ui-content">
 <div class="ui-field-contain">
 <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
  
@@ -99,9 +100,13 @@ print <<<END
     
 END;
 }
+?>
 
+</div>
+<?php 
 include 'disclaimer.php';
 ?>
 
+</div>
 </div>
 

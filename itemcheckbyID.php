@@ -27,7 +27,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
  
 	// Check to see if the request was successful, else print an error
 	if ($resp->Ack == "Success") {
-	    $results = '';
+	    $results = '<div class="ui-grid-a"><div class="ui-block-a">';
         $item = $resp->Item;    	  
 	    // If the response was loaded, parse it and build links   
 	    $ItemID   = $item->ItemID;
@@ -50,7 +50,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $results .= "<div class=\"item\" id=\"$ItemID\">";	   
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img class=\"PictureURL\" src=\"$PictureURL\">";	   
-	    $results .= "<h4 class=\"Title\">$Title</h4>";	   
+	    $results .= "<h2 class=\"Title\">$Title</h2>";	   
 	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
 	    //$results .= "<div class=\"Location\">$Location</div>";
 	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
@@ -58,6 +58,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $results .= "<div class=\"link\"><a href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
 	    //$results .= "<div class=\"EndTime\">$EndTime</div>";
 	    
+	    $results .= "</div>";
 	    $results .= "</div>";
 	    
 	    
@@ -83,8 +84,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
 	    
-	    if($recallresp->attributes->outcome == "success"){
+	    if($recallresp->attributes()->outcome == "success"){
        
+       $totalRecalls = count($recallresp->results->result);
+       
+	    $results .= '<div class="ui-block-b"><h2>Recalls in this product\'s category:' .$totalRecalls. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
 	    foreach($recallresp->results->result as $recall) { 
 	       $recallNo = $recall->attributes()->recallNo;
 	       $recallURL = $recall->attributes()->recallURL;
@@ -97,17 +101,17 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	           
 	        $results .= "<div class=\"recall\" id=\"$recallNo\">";	   
 	        
-	        $results .= "<div class=\"hazard\">$hazard</div>"; 
-	        $results .= "<div class=\"prname\">$prname</div>"; 
-	        $results .= "<div class=\"manufacturer\">$manufacturer</div>"; 
-	        $results .= "<div class=\"country_mfg\">$country_mfg</div>"; 
-	        $results .= "<div class=\"link\"><a href=\"$recallURL\">more information</a></div>"; 
+	        $results .= "<h3 class=\"prname\">$prname</h3>"; 
+	        $results .= "<p class=\"hazard\">Hazard: $hazard</p>"; 
+	        $results .= "<p class=\"manufacturer\">$manufacturer : $country_mfg : <a href=\"$recallURL\">more information</a></p>"; 
 	        
 	        $results .= "</div>";
 	        }
+	        $results .= "</div>";
 	       	    
 	    }
 	          
+	        $results .= "</div>";//closeout the a/b grid
 	} else {
 	  $results  = "Something errored out. Please reload teh page to try the recalls search  again.";
 	}
@@ -119,6 +123,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 <h1><?php echo $Title ?></h1> 
 </div>
  
+<div role="main" class="ui-content">
  
 <?php if (!empty($results)){ 
 print <<<END
@@ -127,15 +132,12 @@ print <<<END
     
 END;
 }
+?>
+
+</div>
+<?php 
 include 'disclaimer.php';
 ?>
  
-
-
-<pre>
-<?php
-	print_r($recallresp);
-?>	
-</pre>
 </div>
 
