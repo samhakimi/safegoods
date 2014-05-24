@@ -14,11 +14,11 @@ if (!empty($_POST)){
    } else {
        $query = ''; 
 
-}
+   }
 	// API request variables
 	$endpoint = 'http://svcs.ebay.com/services/search/FindingService/v1';  // URL to call
 	$version = '1.0.0';  // API version supported by your application
-	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613';  // Replace with your own AppID
+	$appid = 'Codedomi-6e63-454a-baa4-50126bb6f613'; 
 	$globalid = 'EBAY-US';  
 	$safequery = urlencode($query);  // Make the query URL-friendly
 
@@ -29,23 +29,14 @@ if (!empty($_POST)){
 	$apicall .= "&SECURITY-APPNAME=$appid";
 	$apicall .= "&GLOBAL-ID=$globalid";
 	$apicall .= "&keywords=$safequery";
-	$apicall .= "&paginationInput.entriesPerPage=1";
+	$apicall .= "&paginationInput.entriesPerPage=10";
 
 
 
 
 	// Load the call and capture the document returned by eBay API
 	$resp = simplexml_load_file($apicall);
-
-
-?>
-<pre>
-<?php
-	print_r($resp);
-?>	
-</pre>
-
-<?php
+ 
 	// Check to see if the request was successful, else print an error
 	if ($resp->ack == "Success") {
 	  $results = '';
@@ -72,56 +63,11 @@ if (!empty($_POST)){
 	    $results .= "<div class=\"location\">$location</div>";
 	    $results .= "<div class=\"currentPrice\">".money_format('%i', floatval($currentPrice))."</div>";
 	    $results .= "<div class=\"bidCount\">$bidCount</div>";
-	    $results .= "<div class=\"link\"><a href=\"$link\">Go to eBAY</a></div>";
+	    $results .= "<div class=\"link\"><a href=\"?itemID=$itemId\">Recall Check</a></div>";
 	    $results .= "<div class=\"sellingState\">$sellingState $listingType</div>";
 	    $results .= "<div class=\"timeLeft\">$timeLeft</div>";
 	    
-	    $results .= "</div>";
-	    
-	    
-	    
-	    //recalls info gathering
-	    
-
-	    // API request variables
-	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call 
-	    $saferecallquery = urlencode($title);  // Title from the eBay result, make the query URL-friendly
-
-	    // Construct the HTTP GET call 
-	    $recallendpoint = "$recallendpoint?";
-	    $recallendpoint .= "message1=$safequery"; 
-	    $recallendpoint .= "&password=safeGoods"; 
-	    $recallendpoint .= "&userID=safeGoods"; 
-
-
-	    // Load the call and capture the document returned by eBay API
-	    $recallresp = simplexml_load_file($recallendpoint);
-       
-	    foreach($recallresp->results->result as $recall) { 
-	       $recallNo = $recall->attributes()->recallNo;
-	       $recallURL = $recall->attributes()->recallURL;
-	       $manufacturer = $recall->attributes()->manufacturer;
-	       $prname = $recall->attributes()->prname;
-	       $hazard = $recall->attributes()->hazard;
-	       $country_mfg = $recall->attributes()->country_mfg;
-	       
-	       
-	           
-	        $results .= "<div class=\"recall\" id=\"$recallNo\">";	   
-	        
-	        $results .= "<div class=\"hazard\">$hazard</div>"; 
-	        $results .= "<div class=\"prname\">$prname</div>"; 
-	        $results .= "<div class=\"manufacturer\">$manufacturer</div>"; 
-	        $results .= "<div class=\"country_mfg\">$country_mfg</div>"; 
-	        $results .= "<div class=\"link\"><a href=\"$recallURL\">more information</a></div>"; 
-	        
-	        $results .= "</div>";
-	    
-	       
-	       
-	    
-	    }
-	         
+	    $results .= "</div>"; 
 	    
 	  }
 	}
@@ -137,14 +83,7 @@ if (!empty($_POST)){
 
 
 
-
-<pre>
-<?php
-	print_r($recallresp);
-?>	
-</pre>
-
-
+ 
 
 
 
@@ -176,9 +115,5 @@ print <<<END
 </tr>
 </table> 
 END;
-} else {
-
-print "<div id=\"howTo\">Enter an eBay auction ID to see any safety recalls on the product.</div>";
 }
-
 ?>

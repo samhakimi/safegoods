@@ -22,11 +22,7 @@
         <![endif]-->
 
         <!-- integrate shopzilla and the recall api -->
-       
-        <?php  	     
-	    setlocale(LC_MONETARY, 'en_US');	     
-        ?> 
-         
+        
 	    <?php
         if (!empty($_POST)){
 
@@ -41,8 +37,14 @@
         
         <?php if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed") OR isset($_POST['agreed'])) {
 
-                include 'itemcheckbyID.php';
-                include 'disclaimer.php'; 
+
+               if(isset($_GET['itemID'])) { 
+                            include 'itemcheckbyID.php';
+               } else {   
+                            include 'results.php';   
+               }
+     
+               include 'disclaimer.php'; 
 
              }else{
                
