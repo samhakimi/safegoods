@@ -9,4 +9,3 @@
     <a class="ui-btn ui-icon-arrow-r ui-btn-icon-right ui-corner-all ui-shadow" href="?searchField=<?php echo $safequery ?>&pageNumber=<?php echo $pageNumber+1; ?>">Next</a>
   </div>
 </div>
-</div> 

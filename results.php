@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging
+error_reporting(0); 
+//error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging
 ?>
 
 <?php
@@ -74,7 +75,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $results .= "</li>"; 
 	    
 	  }
-	    $results .= "</ul>"; 
+	  $results .= "</ul>"; 
 	} else {
 	  $results  = "Search ebay for an item, we'll check the safety recalls in the product category for you."; 
 	} 
@@ -86,23 +87,17 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 <div data-role="page">
 <div data-role="header">
 <h1>SafeGoods Search</h1>
-</div>
-
-<div role="main" class="ui-content">
+</div> 
 
 
 
 
 <div class="ui-field-contain">
 <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
- 
 <label for="searchField">Search EBAY:</label>
 <input type="search" name="searchField" id="searchField" value="<?php echo $safequery ?>"> 
- 
-</form> 
-
-
-<?php if($query != ''){ include 'navbuttons.php'; } ?>
+ </form> 
+</div>
  
 <?php 
 if (!empty($results)){ 
@@ -113,11 +108,7 @@ print <<<END
 END;
 }
 ?>
-
-
-
 <?php if($query != ''){ include 'navbuttons.php'; } ?>
+<?php include 'footer.php' ?> 
 
-
-</div>
 </div>

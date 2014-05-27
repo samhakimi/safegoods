@@ -28,7 +28,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
  
 	// Check to see if the request was successful, else print an error
 	if ($resp->Ack == "Success") {
-	    $results = '<div class="ui-grid-a"><div class="ui-block-a">';
+	    $results = '<div class="ui-grid-a" style="padding: 10px;"><div class="ui-block-a">';
         $item = $resp->Item;    	  
 	    // If the response was loaded, parse it and build links   
 	    $ItemID   = $item->ItemID;
@@ -70,13 +70,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    
 	    
 	    
-	    //recalls info gathering
-	    // maybe split title, get rid of all word less than 5 letters long
-	     
-	    
-	    //$stringForRecalls = preg_replace("([0-9]+)","", $stringForRecalls);
-	    //$stringForRecalls = preg_replace("(with.*)","", $stringForRecalls);
-	    //$stringForRecalls = preg_replace("(\s.*)","", $stringForRecalls);
+	    //recalls info gathering 
 
 	    // API request variables
 	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
@@ -90,27 +84,35 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
-	    
+	    //print_r($recallresp);exit;
 	    if($recallresp->attributes()->outcome == "success"){
        
        $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>'.$totalRecalls . ' Recalls found in ' . $CategoryName. '</h2><p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of a problem with the technology and or appliance category.</p>';
+	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recall Check:</h2>Found '.$totalRecalls . ' potential matches.';
+	    
+	    if ($totalRecalls > 0) {
+	       $results .= ' <p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of problems with the underlying technology.</p>'; 
+	    
+	    }
 	    
 	       $results .= "<div data-role=\"collapsible-set\">";
+	       
+	       
 	    foreach($recallresp->results->result as $recall) { 
 	       $recallNo = $recall->attributes()->recallNo;
+	       $recDate = $recall->attributes()->recDate;
 	       $recallURL = $recall->attributes()->recallURL;
 	       $manufacturer = $recall->attributes()->manufacturer;
 	       $prname = $recall->attributes()->prname;
+	       if ($prname == ""){$prname = "No Title";}
 	       $hazard = $recall->attributes()->hazard;
 	       $country_mfg = $recall->attributes()->country_mfg;
 	       
 	       
 	           
-	        $results .= "<div data-role=\"collapsible\" id=\"$recallNo\">";	   
-	        
-	        $results .= "<h3>$prname</h3>"; 
+	        $results .= "<div data-role=\"collapsible\" id=\"$recallNo\">";
+	        $results .= "<p class=\"ui-li-aside\">$recDate</p>"; 	        $results .= "<h3>$prname</h3>"; 
 	        $results .= "<p class=\"hazard\">Hazard: $hazard</p>"; 
 	        $results .= "<p class=\"manufacturer\">Manufacturer:  $manufacturer <br> Manufactured in: $country_mfg <br><br>";
 	        $results .= "<a class=\"ui-btn ui-icon-alert ui-btn-icon-left ui-corner-all ui-shadow ui-btn-inline\" href=\"$recallURL\">More Information</a></p>"; 
@@ -144,6 +146,8 @@ print <<<END
 END;
 }
 ?>
+<?php include 'disclaimer.php' ?> 
+<?php include 'footer.php' ?> 
  
 </div>
 </div>

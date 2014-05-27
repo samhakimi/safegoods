@@ -15,6 +15,8 @@
         <style>
           .pic {
             float: right;
+            margin: 5px;
+           
           }
         </style>
     </head>
@@ -37,26 +39,31 @@
  
 
         
-        <?php if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed") OR isset($_POST['agreed'])) {
+        <?php 
+        $agreementSigned = FALSE;
+        
+        if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed") OR isset($_POST['agreed'])) {
+           $agreementSigned = TRUE;
+          }
 
-
+         if ($agreementSigned == TRUE) {
                if(isset($_GET['itemID'])) { 
                             include 'itemcheckbyID.php';
                }else{   
-                            include 'results.php';   
+                            include 'results.php';    
                }
      
 
          }else{
            echo "<script>\$.mobile.changePage( \"#agreement\", { role: \"dialog\"});</script>";
          }
+          
+                  
+        include 'agreement.php';
+        include 'about.php';
        ?> 
 
-
-<?php 
-include 'disclaimer.php';
-include 'agreement.php';
-?>
+ 
 
 
        <script>
@@ -66,9 +73,7 @@ include 'agreement.php';
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
           ga('create', 'UA-51282511-1', 'unclesams.us');
-          ga('send', 'pageview'); 
-        
-        
+          ga('send', 'pageview');         
         </script>
         
         
