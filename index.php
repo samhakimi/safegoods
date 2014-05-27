@@ -27,40 +27,40 @@
         <![endif]-->
 
         
-	    <?php
-        if (!empty($_POST)){
-
-           if(isset($_POST['agreed'])) { 
-               setcookie('cspc_agreement','agreed',time()+60*60*24*1);
-           } 
-        } 
-        ?>
-
- 
-
-        
-        <?php 
+	    <?php 
+	    
+	    //assume not signed in
         $agreementSigned = FALSE;
-        
-        if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed") OR isset($_POST['agreed'])) {
+	    
+	    
+	    //SET THE agreement cookie
+        if (isset($_GET['agreed'])) { 
+               setcookie('cspc_agreement','agreed',time()+60*60*24*1);  
+               $agreementSigned = TRUE;
+        }   
+            
+           
+        if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed")) {
            $agreementSigned = TRUE;
-          }
+        }
 
-         if ($agreementSigned == TRUE) {
+
+
+        if ($agreementSigned == TRUE) {
                if(isset($_GET['itemID'])) { 
-                            include 'itemcheckbyID.php';
-               }else{   
-                            include 'results.php';    
-               }
+                    include 'itemcheckbyID.php';
+        }else{   
+                    include 'results.php';    
+        }
      
 
          }else{
-           echo "<script>\$.mobile.changePage( \"#agreement\", { role: \"dialog\"});</script>";
+           include 'agreement.php';
          }
           
                   
-        include 'agreement.php';
-        include 'about.php';
+        //include 'agreement.php';
+        //include 'about.php';
        ?> 
 
  

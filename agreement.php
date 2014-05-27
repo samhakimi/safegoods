@@ -1,3 +1,12 @@
+<?php
+   $agreementSigned = FALSE;
+   if (isset($_COOKIE['cspc_agreement']) AND ($_COOKIE['cspc_agreement'] == "agreed")) {
+           $agreementSigned = TRUE;
+          }
+?>
+          
+
+
 <div data-role="page" id="agreement" data-dialog="true"
 <?php if ($agreementSigned == FALSE) {echo "data-close-btn=\"none\" ";} ?>
 >
@@ -11,7 +20,7 @@ THE MATERIAL EMBODIED IN THIS SOFTWARE IS PROVIDED TO YOU “AS-IS” AND WITHOU
 <?php if ($agreementSigned == FALSE) {
 print <<<END
 
-<form method="post" action="">
+<form method="GET">
   <input type="submit" id="agreeButton" value="Agree" name="agreed" /> 
   <input type="button" id="notagreeButton"   value="I Do Not Agree" name="notagreed"  /> 
 </form> 

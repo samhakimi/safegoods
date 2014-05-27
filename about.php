@@ -1,6 +1,4 @@
-<div data-role="page" id="about" data-dialog="true"
-<?php if ($agreementSigned == FALSE) {echo "data-close-btn=\"none\" ";} ?>
->
+<div data-role="page" id="about" data-dialog="true">
 <div data-role="header">
 <h1>ABOUT</h1>
 </div>
