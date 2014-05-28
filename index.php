@@ -18,6 +18,32 @@
             margin: 5px;
            
           }
+        .ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit  {
+            /* background-color: #e9e9e9; */ 
+            background-image: url('./bg.png');
+            }
+        .Price {
+            font-size: 75px;
+            float: right;
+            }
+          .Location {
+            font-size: 12px;
+            line-height: 50px;
+            }
+            
+            h2 {
+                letter-spacing: -2px;
+                } 
+           .ui-listview .ui-li-has-thumb>.ui-btn>img:first-child {
+                position: absolute;
+                left: 8px;
+                top: 19px;
+                max-height: 6em;
+                max-width: 6em;
+                }
+            .ui-listview>li h1, .ui-listview>li h2, .ui-listview>li h3, .ui-listview>li h4, .ui-listview>li h5, .ui-listview>li h6, .ui-listview>li p {
+                margin-left: 15px;
+                }    
         </style>
     </head>
     <body>

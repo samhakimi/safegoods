@@ -49,6 +49,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
         }
 	    $BidCount = $item->BidCount;
 	    $ConvertedCurrentPrice = $item->ConvertedCurrentPrice;
+	    $Price = '$' . intval($ConvertedCurrentPrice);
 	    $ListingStatus = $item->ListingStatus;
 	    $Title = $item->Title;
 	    $ConditionID = $item->ConditionID;
@@ -59,9 +60,10 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
-	    //$results .= "<div class=\"Location\">$Location</div>";
-	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
-	    //$results .= "<div class=\"BidCount\">$BidCount</div>";
+	    $results .= "<div class=\"Price\">$Price</div>";
+	    $results .= "<div class=\"Location\">Location : $Location</div>";
+	    $results .= "<div>Condition : $ConditionDisplayName</div>";
+	    $results .= "<div class=\"BidCount\">Current Bid Count : $BidCount</div>";
 	    $results .= "<div><a class=\"ui-btn ui-icon-navigation ui-btn-icon-left ui-corner-all ui-shadow ui-btn-inline\" href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
 	    //$results .= "<div class=\"EndTime\">$EndTime</div>";
 	    
@@ -127,14 +129,14 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	          
 	        $results .= "</div>";//closeout the a/b grid
 	} else {
-	  $results  = "Communication error. Please reload page.";
+	  $results  = "Communication error. Please <a href=''>reload page</a>.";
 	}
  
 ?>
 <div data-role="page">
 <div data-role="header">
-<a id="backButton" href="?searchField=<?php echo $searchField ?>&pageNumber=<?php echo $pageNumber ?>" data-icon="arrow-l">Go Back</a>
-<h1><?php echo $Title ?></h1> 
+<a id="backButton" href="?searchField=<?php echo $searchField ?>&pageNumber=<?php echo $pageNumber ?>" data-icon="arrow-l">Back to List</a>
+<h1>SafeGoods Check : <?php echo $Title ?></h1> 
 </div>
  
 <div role="main" class="ui-content"> 
@@ -147,7 +149,7 @@ END;
 }
 ?>
 <?php include 'disclaimer.php' ?> 
-<?php include 'footer.php' ?> 
  
 </div>
+<?php include 'footer.php' ?> 
 </div>
