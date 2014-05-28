@@ -129,7 +129,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	          
 	        $results .= "</div>";//closeout the a/b grid
 	} else {
-	  $results  = "Communication error. Please <a href=''>reload page</a>.";
+	  $results  = "Communication error. Please <a href='.'>reload page</a>.";
 	}
  
 ?>

@@ -23,8 +23,9 @@
             background-image: url('./bg.png');
             }
         .Price {
-            font-size: 75px;
-            float: right;
+            font-size: 800%;
+            float: right; 
+            letter-spacing: -20px;           
             }
           .Location {
             font-size: 12px;
@@ -43,7 +44,10 @@
                 }
             .ui-listview>li h1, .ui-listview>li h2, .ui-listview>li h3, .ui-listview>li h4, .ui-listview>li h5, .ui-listview>li h6, .ui-listview>li p {
                 margin-left: 15px;
-                }    
+                }   
+             div.ui-block-a {
+                max-width: 400px;
+                } 
         </style>
     </head>
     <body>
