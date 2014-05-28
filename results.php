@@ -86,7 +86,7 @@ error_reporting(0);
 
 <div data-role="page">
 <div data-role="header">
-<h1>SafeGoods Search</h1>
+<h1>SafeGoods ebay/recalls Search</h1>
 </div> 
 
 
@@ -98,6 +98,9 @@ error_reporting(0);
 <input type="search" name="searchField" id="searchField" value="<?php echo $safequery ?>"> 
  </form> 
 </div>
+
+ 
+ 
  
 <?php 
 if (!empty($results)){ 
