@@ -77,7 +77,7 @@ error_reporting(0);
 	  }
 	  $results .= "</ul>"; 
 	} else {
-	  $results  = "Search ebay for an item, we'll check the safety recalls in the product category for you."; 
+	  $results  = "<br>Use the search feature to look for EBAY items, we'll check the safety incident reports for the products you're interested in.<br><br><br><br>"; 
 	} 
 ?>
 
@@ -86,7 +86,7 @@ error_reporting(0);
 
 <div data-role="page">
 <div data-role="header">
-<h1>SafeGoods ebay/recalls Search</h1>
+<h1>SafeGoods EBAY Item Safety Check</h1>
 </div> 
 
 

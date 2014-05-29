@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging 
+error_reporting(E_ALL);   
 
 
    if(isset($_GET['itemID']) AND isset($_GET['searchField'])) { 
@@ -38,17 +38,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $GalleryURL = $item->GalleryURL;
 	    $PictureURL = $item->PictureURL;
 	    $PrimaryCategoryID = $item->PrimaryCategoryID;
-	    $PrimaryCategoryName = $item->PrimaryCategoryName;	
-	    $PrimaryCategoryName = preg_replace('/[,\.&-\d\(\)]/', ' ', $PrimaryCategoryName); ;	    
-	    $categories = explode(":", $PrimaryCategoryName);//get the last string;	    
-	    $CategoryName = end($categories);//last in the category list	    
-	    $uselessCategories = array("Other", "Factory Manufactured"); 
-        if (in_array($CategoryName, $uselessCategories, true)) {
-           $CategoryName = array_pop($categories);
-           $CategoryName = end($categories);
-        }
+	    $Category = $item->PrimaryCategoryName;	
+        
 	    $BidCount = $item->BidCount;
 	    $ConvertedCurrentPrice = $item->ConvertedCurrentPrice;
+	    $Price = '$' . $ConvertedCurrentPrice  ;
 	    $ListingStatus = $item->ListingStatus;
 	    $Title = $item->Title;
 	    $ConditionID = $item->ConditionID;
@@ -56,12 +50,13 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	   
 	    $results .= "<div id=\"$ItemID\">";	   
 	    $results .= "<h2 class=\"Title\">$Title</h2>";	   
-	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
+	    $results .= "<h5 class=\"Category\">$Category</h5>";
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
-	    //$results .= "<div class=\"Location\">$Location</div>";
-	    $results .= "<div class=\"ConvertedCurrentPrice\">\$$ConvertedCurrentPrice  | Condition: $ConditionDisplayName</div>";
-	    //$results .= "<div class=\"BidCount\">$BidCount</div>";
+	    $results .= "<div class=\"Price\">$Price</div>";
+	    $results .= "<div class=\"Location\">Location : $Location</div>";
+	    $results .= "<div>Condition : $ConditionDisplayName</div>";
+	    $results .= "<div class=\"BidCount\">Current Bid Count : $BidCount</div>";
 	    $results .= "<div><a class=\"ui-btn ui-icon-navigation ui-btn-icon-left ui-corner-all ui-shadow ui-btn-inline\" href=\"$ViewItemURLForNaturalSearch\">see item at ebay</a></div>";
 	    //$results .= "<div class=\"EndTime\">$EndTime</div>";
 	    
@@ -72,34 +67,47 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    
 	    //recalls info gathering 
 
+	    
+	    
+	    	    
+	    $recallSearch = strtolower($Category); 	    
+	    $recallSearch = preg_replace('/[\$\!\?"\/,\.-\d\(\)]/', '', $recallSearch);   
+	    $recallSearch = preg_replace('/\b(now|old|vintage|brand|collectibles|other|manufactured|factory|modern|new|used|one|two|in|and|with)\b/', '', $recallSearch);  
+	    $recallSearch = explode(':', $recallSearch);
+	    $recallSearch = array_filter($recallSearch);	     
+	    krsort($recallSearch); //start from detailed category first 
+	     
+	    
+	    foreach ($recallSearch as &$searchKeyword) { 
+	    
 	    // API request variables
 	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
 	    // Construct the HTTP GET call 
 	    $recallendpoint = "$recallendpoint?";
-	    $recallendpoint .= "message1=$CategoryName"; 
+	    $recallendpoint .= "message1=$searchKeyword"; 
 	    $recallendpoint .= "&password=safeGoods"; 
 	    $recallendpoint .= "&userID=safeGoods"; 
-
-        //print_r($recallendpoint);
+ 
 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
-	    //print_r($recallresp);exit;
+	     
 	    if($recallresp->attributes()->outcome == "success"){
        
-       $totalRecalls = count($recallresp->results->result);
+         $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recall Check:</h2>Found '.$totalRecalls . ' potential matches.';
+	     $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>' . $searchKeyword . ':</h2>Found ' . $totalRecalls . ' recalls.' ;
 	    
 	    if ($totalRecalls > 0) {
-	       $results .= ' <p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of problems with the underlying technology.</p>'; 
+	       $results .= ' <p class="tinytext">Please go through this list carefully.</p>'; 
 	    
 	    }
 	    
 	       $results .= "<div data-role=\"collapsible-set\">";
-	       
+	    
 	       
 	    foreach($recallresp->results->result as $recall) { 
+	       
 	       $recallNo = $recall->attributes()->recallNo;
 	       $recDate = $recall->attributes()->recDate;
 	       $recallURL = $recall->attributes()->recallURL;
@@ -121,11 +129,13 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	        }
 	        
 	        $results .= "</div>"; //close out the collapsible set
-	        $results .= "</div>"; //close out ui block b
 	       	    
 	    }
-	          
-	        $results .= "</div>";//closeout the a/b grid
+	    
+	   $results .= "</div>"; //close out ui block b
+	   if ($totalRecalls > 0) break; //no need to go up the category chain since we returned some recalls  
+	    }        
+	 $results .= "</div>";//closeout the a/b grid
 	} else {
 	  $results  = "Communication error. Please reload page.";
 	}
@@ -133,8 +143,8 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 ?>
 <div data-role="page">
 <div data-role="header">
-<a id="backButton" href="?searchField=<?php echo $searchField ?>&pageNumber=<?php echo $pageNumber ?>" data-icon="arrow-l">Go Back</a>
-<h1><?php echo $Title ?></h1> 
+<a id="backButton" href="?searchField=<?php echo $searchField ?>&pageNumber=<?php echo $pageNumber ?>" data-icon="arrow-l">Back to List</a>
+<h1>SafeGoods Check : <?php echo $Title ?></h1> 
 </div>
  
 <div role="main" class="ui-content"> 
@@ -147,7 +157,7 @@ END;
 }
 ?>
 <?php include 'disclaimer.php' ?> 
-<?php include 'footer.php' ?> 
  
 </div>
+<?php include 'footer.php' ?> 
 </div>
