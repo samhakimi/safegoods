@@ -67,10 +67,6 @@ error_reporting(E_ALL);
 	    
 	    //recalls info gathering 
 
-	    // API request variables
-	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
-	    // Construct the HTTP GET call 
-	    $recallendpoint = "$recallendpoint?";
 	    
 	    
 	    	    
@@ -82,25 +78,25 @@ error_reporting(E_ALL);
 	    krsort($recallSearch); //start from detailed category first 
 	     
 	    
-	    foreach ($recallSearch as &$searchKeyword) {
+	    foreach ($recallSearch as &$searchKeyword) { 
 	    
-	    
-	   
-	    
+	    // API request variables
+	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
+	    // Construct the HTTP GET call 
+	    $recallendpoint = "$recallendpoint?";
 	    $recallendpoint .= "message1=$searchKeyword"; 
 	    $recallendpoint .= "&password=safeGoods"; 
 	    $recallendpoint .= "&userID=safeGoods"; 
-
-        //print_r($recallendpoint);
+ 
 
 	    // Load the call and capture the document returned by eBay API
 	    $recallresp = simplexml_load_file($recallendpoint);
-	    //print_r($recallresp);exit;
+	     
 	    if($recallresp->attributes()->outcome == "success"){
        
-       $totalRecalls = count($recallresp->results->result);
+         $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recall Check for "' . $searchKeyword . '" found ' . $totalRecalls . ' reported.</h2>';
+	     $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>' . $searchKeyword . ':</h2>Found ' . $totalRecalls . ' recalls.' ;
 	    
 	    if ($totalRecalls > 0) {
 	       $results .= ' <p class="tinytext">Please go through this list carefully.</p>'; 
@@ -109,9 +105,9 @@ error_reporting(E_ALL);
 	    
 	       $results .= "<div data-role=\"collapsible-set\">";
 	    
-	    $recallsFound = 0;      
+	       
 	    foreach($recallresp->results->result as $recall) { 
-	       ++$recallsFound;
+	       
 	       $recallNo = $recall->attributes()->recallNo;
 	       $recDate = $recall->attributes()->recDate;
 	       $recallURL = $recall->attributes()->recallURL;
@@ -133,14 +129,15 @@ error_reporting(E_ALL);
 	        }
 	        
 	        $results .= "</div>"; //close out the collapsible set
-	        $results .= "</div>"; //close out ui block b
 	       	    
 	    }
-	   if ($recallsFound > 1) break; //no need to go up the category chain since we returned some recalls  
-	   }       
-	        $results .= "</div>";//closeout the a/b grid
+	    
+	   $results .= "</div>"; //close out ui block b
+	   if ($totalRecalls > 0) break; //no need to go up the category chain since we returned some recalls  
+	    }        
+	 $results .= "</div>";//closeout the a/b grid
 	} else {
-	  $results  = "Communication error. Please <a href='.'>reload page</a>.";
+	  $results  = "Communication error. Please reload page.";
 	}
  
 ?>
