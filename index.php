@@ -18,14 +18,20 @@
             margin: 5px;
            
           }
-        .ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit  {
-            /* background-color: #e9e9e9; */ 
+        .ui-bar-a, .ui-page-theme-a .ui-bar-inherit, html .ui-bar-a .ui-bar-inherit, html .ui-body-a .ui-bar-inherit, html body .ui-group-theme-a .ui-bar-inherit  { 
             background-image: url('./bg.png');
             }
-        .Price {
-            font-size: 800%;
+            
+          p.ui-li-aside {
+            float: right;
+            font-size: 10px;
+            font-weight: bold;
+            }  
+            
+          .Price {
+            font-size: 400%;
             float: right; 
-            letter-spacing: -20px;           
+            letter-spacing: -5px;           
             }
           .Location {
             font-size: 12px;
@@ -48,6 +54,9 @@
              div.ui-block-a {
                 max-width: 400px;
                 } 
+              .tinytext {
+                font-size: 10pt;
+              }
         </style>
     </head>
     <body>

@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier debugging 
+error_reporting(E_ALL);   
 
 
    if(isset($_GET['itemID']) AND isset($_GET['searchField'])) { 
@@ -38,18 +38,11 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $GalleryURL = $item->GalleryURL;
 	    $PictureURL = $item->PictureURL;
 	    $PrimaryCategoryID = $item->PrimaryCategoryID;
-	    $PrimaryCategoryName = $item->PrimaryCategoryName;	
-	    $PrimaryCategoryName = preg_replace('/[,\.&-\d\(\)]/', ' ', $PrimaryCategoryName); ;	    
-	    $categories = explode(":", $PrimaryCategoryName);//get the last string;	    
-	    $CategoryName = end($categories);//last in the category list	    
-	    $uselessCategories = array("Other", "Factory Manufactured"); 
-        if (in_array($CategoryName, $uselessCategories, true)) {
-           $CategoryName = array_pop($categories);
-           $CategoryName = end($categories);
-        }
+	    $Category = $item->PrimaryCategoryName;	
+        
 	    $BidCount = $item->BidCount;
 	    $ConvertedCurrentPrice = $item->ConvertedCurrentPrice;
-	    $Price = '$' . intval($ConvertedCurrentPrice);
+	    $Price = '$' . $ConvertedCurrentPrice  ;
 	    $ListingStatus = $item->ListingStatus;
 	    $Title = $item->Title;
 	    $ConditionID = $item->ConditionID;
@@ -57,7 +50,7 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	   
 	    $results .= "<div id=\"$ItemID\">";	   
 	    $results .= "<h2 class=\"Title\">$Title</h2>";	   
-	    $results .= "<h5 class=\"PrimaryCategoryName\">$PrimaryCategoryName</h5>";
+	    $results .= "<h5 class=\"Category\">$Category</h5>";
 	    //$results .= "<img class=\"GalleryURL\" src=\"$GalleryURL\">";
 	    $results .= "<img style=\"max-width: 100%;\" class=\"PictureURL ui-overlay-shadow ui-corner-all\" src=\"$PictureURL\">";	   
 	    $results .= "<div class=\"Price\">$Price</div>";
@@ -78,7 +71,23 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	    $recallendpoint = 'https://www.cpsc.gov/cgibin/CPSCUpcWS/CPSCUpcSvc.asmx/getRecallByWord';  // URL to call
 	    // Construct the HTTP GET call 
 	    $recallendpoint = "$recallendpoint?";
-	    $recallendpoint .= "message1=$CategoryName"; 
+	    
+	    
+	    	    
+	    $recallSearch = strtolower($Category); 	    
+	    $recallSearch = preg_replace('/[\$\!\?"\/,\.-\d\(\)]/', '', $recallSearch);   
+	    $recallSearch = preg_replace('/\b(now|old|vintage|brand|collectibles|other|manufactured|factory|modern|new|used|one|two|in|and|with)\b/', '', $recallSearch);  
+	    $recallSearch = explode(':', $recallSearch);
+	    $recallSearch = array_filter($recallSearch);	     
+	    krsort($recallSearch); //start from detailed category first 
+	     
+	    
+	    foreach ($recallSearch as &$searchKeyword) {
+	    
+	    
+	   
+	    
+	    $recallendpoint .= "message1=$searchKeyword"; 
 	    $recallendpoint .= "&password=safeGoods"; 
 	    $recallendpoint .= "&userID=safeGoods"; 
 
@@ -91,17 +100,18 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
        
        $totalRecalls = count($recallresp->results->result);
        
-	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recall Check:</h2>Found '.$totalRecalls . ' potential matches.';
+	    $results .= '<div class="ui-block-b" style="padding-left: 10px;"><h2>Recall Check for "' . $searchKeyword . '" found ' . $totalRecalls . ' reported.</h2>';
 	    
 	    if ($totalRecalls > 0) {
-	       $results .= ' <p>Please go through this list carefully. Even if you don\'t see an exact match, a high number of recalls may be indicative of problems with the underlying technology.</p>'; 
+	       $results .= ' <p class="tinytext">Please go through this list carefully.</p>'; 
 	    
 	    }
 	    
 	       $results .= "<div data-role=\"collapsible-set\">";
-	       
-	       
+	    
+	    $recallsFound = 0;      
 	    foreach($recallresp->results->result as $recall) { 
+	       ++$recallsFound;
 	       $recallNo = $recall->attributes()->recallNo;
 	       $recDate = $recall->attributes()->recDate;
 	       $recallURL = $recall->attributes()->recallURL;
@@ -126,7 +136,8 @@ error_reporting(E_ALL);  // Turn on all errors, warnings and notices for easier 
 	        $results .= "</div>"; //close out ui block b
 	       	    
 	    }
-	          
+	   if ($recallsFound > 1) break; //no need to go up the category chain since we returned some recalls  
+	   }       
 	        $results .= "</div>";//closeout the a/b grid
 	} else {
 	  $results  = "Communication error. Please <a href='.'>reload page</a>.";
