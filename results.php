@@ -90,7 +90,7 @@ error_reporting(0);
 </div> 
 
 
-
+<div data-role="content">
 
 <div class="ui-field-contain">
 <form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
@@ -111,6 +111,7 @@ print <<<END
 END;
 }
 ?>
+</div> 
 <?php if($query != ''){ include 'navbuttons.php'; } ?>
 <?php include 'footer.php' ?> 
 

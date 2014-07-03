@@ -30,7 +30,7 @@
             
           .Price {
             font-size: 400%;
-            float: right; 
+            //float: right; 
             letter-spacing: -5px;           
             }
           .Location {
@@ -51,9 +51,7 @@
             .ui-listview>li h1, .ui-listview>li h2, .ui-listview>li h3, .ui-listview>li h4, .ui-listview>li h5, .ui-listview>li h6, .ui-listview>li p {
                 margin-left: 15px;
                 }   
-             div.ui-block-a {
-                max-width: 400px;
-                } 
+              
               .tinytext {
                 font-size: 10pt;
               }
